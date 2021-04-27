@@ -1,12 +1,6 @@
 import mysql.connector
 from mysql.connector import Error
-from confluent_kafka import Producer
-from faker import Faker
-from random import randint
-import time
-from producerCode import run_producer, delivery_report
 import json
-from consumer import run_consumer
 
 def create_server_connection(host_name, user_name, user_password, db_name):
     connection = None
@@ -48,6 +42,13 @@ def create_retailer(retail_id, retail_name):
     VALUES ({retail_id}, '{retail_name}');
     """
     execute_query(connection, q1)
+
+def add_transaction(client_id, retail_id, item_id, cost_price, BorS, consignment_no, transaction_date):
+    add_query = f"""
+    INSERT INTO {BorS} (client_id, retail_id, item_id, cost_price, consignment_no, transaction_date)
+    VALUES ('{client_id}', '{retail_id}', '{item_id}', '{cost_price}', '{consignment_no}', '{transaction_date}');
+    """
+    execute_query(connection, add_query)
 
 if __name__ == '__main__':
     connection = create_server_connection('localhost', 'root', "", 'store')
